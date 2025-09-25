@@ -32,24 +32,27 @@ internal class Program
 
         Console.WriteLine("Regler:");
 
-        Console.WriteLine("* Ladda  = +1 skott");
-        Console.WriteLine("* Skjuta = -1 skott)");
+        Console.WriteLine("* Ladda  = + 1 skott");
+        Console.WriteLine("* Skjuta = Du måste ha skott och kan vinna om motståndaren blockar eller laddar)");
         Console.WriteLine("* Blocka = Skyddar mot skott");
         Console.WriteLine("* Shotgun = Om du har 3 skott, kan du vinna direkt!");
         Console.WriteLine();
-        Console.WriteLine("Tips: RobotRobin är slug, blockar när han anar fara och väntar på rätt läge...");
+        Console.WriteLine("RobotRobin är slug, blockar när han anar fara och väntar på rätt läge...");
         Console.WriteLine();
         Console.ResetColor();
 
         Console.WriteLine();
-        spelare spelare = new spelare();
-        spelare ai = new spelare();
-        for (int i = 0; i < spelare.SkjutaPers.Length; i++)
+        Spelare spelare = new Spelare();
+        Ai ai = new Ai(); 
+        Grafik grafik = new Grafik();
+
+
+        for (int i = 0; i < grafik.SkjutaPers.Length; i++)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write(spelare.SkjutaPers[i]);
+            Console.Write(grafik.SkjutaPers[i]);
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(spelare.SkjutaSkott[i]);
+            Console.WriteLine(grafik.SkjutaSkott[i]);
             Console.ResetColor();
         }
         Console.WriteLine();
@@ -59,10 +62,17 @@ internal class Program
         spelare.Namn = Console.ReadLine();
         ai.Namn = "RobotRobin";
         Console.WriteLine();
-        Console.WriteLine("       " + spelare.Namn + "                " + ai.Namn);
-        CreateScene(spelare.Start, ai.AiStart, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.Write("       " + spelare.Namn );
+        Console.ResetColor();
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.WriteLine("               " + ai.Namn);
+        Console.ResetColor();
+        grafik.CreateScene(grafik.Start, grafik.AiStart, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
         Console.WriteLine();
         Console.WriteLine("ladda, skjuta, blocka eller shotgun");
+        Console.WriteLine();
 
 
         /*   SHOTGUN
@@ -96,36 +106,15 @@ internal class Program
 
         while (spela)
         {
-
+            //Spelaren får välja drag
             Console.WriteLine("Vad väljer du? ");
             Console.WriteLine();
-            spelare.Val = GiltigtVal(spelare.Skott);
-            // Ai får välja, lägg in if sats för att göra smartare
-            Console.Write(ai.Namn + " väljer...        ");
-            Thread.Sleep(1500);
-            ai.Val = RandomVal(ai.Skott, spelare.Skott);
+            spelare.Val = spelare.GiltigtVal(spelare.Skott); //skickar in spelarens skott för att validera spelarens val
+            // Ai får välja
+            Console.Write(ai.Namn + " väljer...       ");
+            Thread.Sleep(1500); //fördröjning för att skapa spänning
+            ai.Val = ai.RandomVal(spelare.Skott); //skickar in spelarens skott för att ai ska kunna anpassa sitt val
             Console.WriteLine(ai.Val);
-
-            /*
-           while (spelare.Val == "skjuta" && spelareSkott <= 0)
-           {
-              Console.WriteLine("Du har inga skott, välj ladda eller blocka.");
-              spelareVal = Console.ReadLine();
-           }
-          while (spelareVal == "shotgun" && spelareSkott < 3)
-          {
-              Console.WriteLine("Du måste ha minst 3 skott för att använda SHOTGUN! välj igen.");
-              spelareVal = Console.ReadLine();
-          }*/
-
-
-            /*
-                else if (aiChoice == "skjuta" && aiShot <= 0)
-                {
-                aiChoice = "";
-                aiChoice = RandomChoice();
-                }*/
-
 
 
 
@@ -133,27 +122,27 @@ internal class Program
             {   //båda får ett skott
                 spelare.Skott = spelare.Skott + 1;
                 ai.Skott = ai.Skott + 1;
-                CreateScene(spelare.Ladda, ai.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Ladda, grafik.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
 
             }
             else if (spelare.Val == "ladda" && ai.Val == "skjuta")
             {   //ai vinner
                 spelare.Skott = spelare.Skott + 1;
                 ai.Skott = ai.Skott - 1;
-                CreateScene(spelare.Ladda, ai.AiSkjuta, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Ladda, grafik.AiSkjuta, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                 vinnare = ai.Namn;
                 spela = false; //Spelet avslutas
             }
             else if (spelare.Val == "ladda" && ai.Val == "blocka")
             {   //user får ett skott
                 spelare.Skott = spelare.Skott + 1;
-                CreateScene(spelare.Ladda, ai.AiBlocka, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Ladda, grafik.AiBlocka, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
             }
             else if (spelare.Val == "skjuta" && ai.Val == "ladda")
             {   //user vinner
                 spelare.Skott = spelare.Skott - 1;
                 ai.Skott = +1;
-                CreateScene(spelare.Skjuta, ai.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Skjuta, grafik.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                 vinnare = spelare.Namn;
                 spela = false;
             }
@@ -161,37 +150,37 @@ internal class Program
             {   //båda förlorar ett skott
                 spelare.Skott = spelare.Skott - 1;
                 ai.Skott = ai.Skott - 1;
-                CreateScene(spelare.Skjuta, ai.AiSkjuta, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Skjuta, grafik.AiSkjuta, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
 
             }
             else if (spelare.Val == "skjuta" && ai.Val == "blocka")
             {   //user -1 skott
                 spelare.Skott = spelare.Skott - 1;
-                CreateScene(spelare.Skjuta, ai.AiBlocka, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Skjuta, grafik.AiBlocka, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
 
             }
             else if (spelare.Val == "blocka" && ai.Val == "ladda")
             {   //ai +1 skott
                 ai.Skott = ai.Skott + 1;
-                CreateScene(spelare.Blocka, ai.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Blocka, grafik.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
 
             }
             else if (spelare.Val == "blocka" && ai.Val == "skjuta")
             {   //ai -1 skott
                 ai.Skott = ai.Skott - 1;
-                CreateScene(spelare.Blocka, ai.AiSkjuta, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Blocka, grafik.AiSkjuta, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
 
             }
             else if (spelare.Val == "blocka" && ai.Val == "blocka")
             {   //inget händer
-                CreateScene(spelare.Blocka, ai.AiBlocka, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Blocka, grafik.AiBlocka, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
 
             }
             else if (spelare.Val == "shotgun" && ai.Val == "skjuta")
             {   //user vinner
                 spelare.Skott = spelare.Skott - 3;
                 ai.Skott = ai.Skott - 1;
-                CreateScene(spelare.Shotgun, ai.AiSkjuta, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Shotgun, grafik.AiSkjuta, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                 vinnare = spelare.Namn;
                 spela = false;
 
@@ -200,7 +189,7 @@ internal class Program
             {   //user vinner
                 spelare.Skott = spelare.Skott - 3;
                 ai.Skott = ai.Skott + 1;
-                CreateScene(spelare.Shotgun, ai.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Shotgun, grafik.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                 vinnare = spelare.Namn;
                 spela = false;
 
@@ -208,7 +197,7 @@ internal class Program
             else if (spelare.Val == "shotgun" && ai.Val == "blocka")
             {   //user vinner
                 spelare.Skott = spelare.Skott - 3;
-                CreateScene(spelare.Shotgun, ai.AiBlocka, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Shotgun, grafik.AiBlocka, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                 vinnare = spelare.Namn;
                 spela = false;
 
@@ -217,7 +206,7 @@ internal class Program
             {   //ai vinner
                 spelare.Skott = spelare.Skott - 1;
                 ai.Skott = ai.Skott - 3;
-                CreateScene(spelare.Skjuta, ai.AiShotgun, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Skjuta, grafik.AiShotgun, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                 vinnare = ai.Namn;
                 spela = false;
 
@@ -225,7 +214,7 @@ internal class Program
             else if (spelare.Val == "blocka" && ai.Val == "shotgun")
             {   //ai vinner
                 ai.Skott = ai.Skott - 3;
-                CreateScene(spelare.Blocka, ai.AiShotgun, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Blocka, grafik.AiShotgun, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                 vinnare = ai.Namn;
                 spela = false;
 
@@ -234,7 +223,7 @@ internal class Program
             {   //ai vinner
                 spelare.Skott = spelare.Skott + 1;
                 ai.Skott = ai.Skott - 3;
-                CreateScene(spelare.Ladda, ai.AiShotgun, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Ladda, grafik.AiShotgun, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                 vinnare = ai.Namn;
                 spela = false;
 
@@ -243,11 +232,12 @@ internal class Program
             {   //slumpmässig vinnare eller båda förlorar skott
                 spelare.Skott = spelare.Skott - 3;
                 ai.Skott = ai.Skott - 3;
-                CreateScene(spelare.Shotgun, ai.AiShotgun, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                grafik.CreateScene(grafik.Shotgun, grafik.AiShotgun, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
             }
             else
             {
                 Console.WriteLine("ladda, skjuta, blocka eller shotgun?");
+               
             }
 
 
@@ -259,24 +249,37 @@ internal class Program
                 //fixa för att avsluta eller fortsätta spel + fördröjning
                 if (vinnare == spelare.Namn)
                 {
+                    Thread.Sleep(1500);
                     Console.WriteLine();
-                    Console.WriteLine("          " + spelare.Namn + " ÄR VINNAREN! ");
-                    CreateScene(spelare.Vinnare, ai.AiFörlorare, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("***************************************");
+                    Console.WriteLine("         " + spelare.Namn + " ÄR SEGRAREN! ");
+                    Console.WriteLine("***************************************");
+                    Console.ResetColor();
+                    grafik.CreateScene(grafik.Vinnare, grafik.AiFörlorare, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
 
                 }
                 else if (vinnare == ai.Namn)
                 {
+                    Thread.Sleep(1500);
                     Console.WriteLine();
-                    Console.WriteLine("          " + ai.Namn + " ÄR VINNAREN!");
-                    CreateScene(spelare.Förlorare, ai.AiVinnare, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("***************************************");
+                    Console.WriteLine("        " + ai.Namn + " ÄR SEGRAREN! ");
+                    Console.WriteLine("***************************************");
+                    Console.ResetColor();
+                    grafik.CreateScene(grafik.Förlorare, grafik.AiVinnare, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
 
                 }
-
+                Console.WriteLine();
                 Console.Write("Vill du fortsätta spela? (J/N)");
                 fortsatt = Console.ReadLine().ToUpper();
                 Console.WriteLine();
+                bool fortsattSpela = false;
 
-                while (fortsatt != "J" && fortsatt != "N")
+                while (fortsattSpela == false)
                 {
 
 
@@ -287,16 +290,19 @@ internal class Program
                         spelare.Skott = 0;
                         ai.Skott = 0;
                         Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.ForegroundColor = ConsoleColor.DarkCyan;
                         Console.WriteLine("\"Bra... jag visste att du hade mer mod i dig.\" 🤖");
                         Console.ResetColor();
                         Console.WriteLine("RobotRobin laddar om sina kretsar och ställer sig redo igen!");
+                        Thread.Sleep(2000);
+                        Console.WriteLine();
                         Console.WriteLine();
                         Console.WriteLine("        " + spelare.Namn + "               " + ai.Namn);
-                        CreateScene(spelare.Ladda, ai.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Cyan, ConsoleColor.Yellow);
+                        grafik.CreateScene(grafik.Ladda, grafik.AiLadda, spelare.Skott, ai.Skott, ConsoleColor.Green, ConsoleColor.DarkCyan);
                         Console.WriteLine();
                         Console.WriteLine("ladda, skjuta, blocka eller shotgun");
                         // Nollställ spelare och ai
+                        fortsattSpela = true;
                     }
                     else if (fortsatt == "N")
                     {
@@ -306,15 +312,19 @@ internal class Program
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("Du lämnar arenan som segrare. RobotRobin gnisslar sina kugghjul i ilska...");
                             Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("\"Detta är inte över... nästa gång kommer jag krossa dig!\" 🤖");
+                            Console.ResetColor();
+                            fortsattSpela = true;
                         }
                         else if (vinnare == ai.Namn)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Du faller till marken, besegrad av RobotRobin.");
-                            Console.ResetColor();
                             Console.WriteLine("\"Mwahaha! Jag visste att du inte hade en chans mot mig!\" 🤖");
                             Console.WriteLine("Han går därifrån och lämnar dig i dammet...");
+                            Console.ResetColor();
+                            fortsattSpela = true;
                         }
                     }
                     else
@@ -331,152 +341,8 @@ internal class Program
         }
 
 
-
-
-
-
-
-
-
-
-
-
     }
-
-
-    public static string GiltigtVal(int skott) //tar in värdet från skott
-    {
-        //metod för att giltigt val ska skickas tillbaka
-
-        string val = ""; //en string som bara finns i metoden
-        bool giltig = false;
-
-
-
-        while (giltig == false)
-        {
-            val = Console.ReadLine().ToLower();
-            //ladda, skjuta, blocka, shotgun ska bli rätt
-            if (val == "ladda" || val == "blocka")
-            {
-                giltig = true;
-            }
-            else if (val == "skjuta" && skott <= 0)
-            {
-                Console.WriteLine("Du har inga skott, välj ladda eller blocka: ");
-            }
-            else if (val == "skjuta" && skott > 0)
-            {
-                giltig = true;
-            }
-            else if (val == "shotgun" && skott < 3)
-            {
-                Console.WriteLine("Du behöver 3 skott för shotgun, välj igen: ");
-            }
-            else if (val == "shotgun" && skott >= 3)
-            {
-                giltig = true;
-            }
-            else
-            {
-                Console.WriteLine("ladda, skjuta, blocka eller shotgun? ");
-            }
-
-        }
-        return val;
-    }
-
-
-
-
-    //En randomfunktion som kan användas överallt
-    public static Random random = new Random();
-
-    //Metod som väljer bland de olika valen med randomnr som läses av i arrayen
-    public static string RandomVal(int aiSkott, int spelareSkott)
-    {
-
-
-
-        string aiVal = "";
-        bool giltig = false;
-
-
-
-        while (giltig == false)
-        {
-            string[] ai = { "skjuta", "ladda", "blocka", "shotgun" };
-            int i = random.Next(ai.Length);
-            aiVal = ai[i];
-
-            //ladda, skjuta, blocka, shotgun ska bli rätt
-            if (aiVal == "ladda" && aiSkott <= 2)  //ai ska inte blocka om spelare har 0 Skott
-            {
-                giltig = true;
-
-            }
-            else if (aiVal == "blocka" && spelareSkott > 0 && aiSkott <= 2)
-            {
-                giltig = true;
-            }
-            else if (aiVal == "blocka" && spelareSkott == 0)
-            {
-
-            }
-            else if (aiVal == "skjuta" && aiSkott <= 0)
-            {
-
-            }
-            else if (aiVal == "skjuta" && aiSkott > 0 && aiSkott <= 2)
-            {
-                giltig = true;
-
-            }
-            else if (aiVal == "shotgun" && aiSkott < 3)
-            {
-
-            }
-            else if (aiVal == "shotgun" && aiSkott >= 3)
-            {
-                giltig = true;
-
-            }
-
-        }
-        return aiVal;
-    }
-
-
-    // En metod som skriver ut en scen med 2 arrayer bredvid varandra
-    // Lägg till antal skott längst ner i scenen och ev en fördröjning på ai
-    public static void CreateScene(string[] spelare, string[] ai, int spelareSkott, int aiSkott, ConsoleColor spelareFarg, ConsoleColor aiFarg)
-    {
-
-
-        // Skriv ut titlar
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-        Console.WriteLine("");
-        Console.WriteLine(" ---------------------------------------");
-        Console.ResetColor();
-        Console.WriteLine();
-
-        // Skriv ut figurerna rad för rad
-        for (int i = 0; i < spelare.Length; i++)
-        {
-            Console.ForegroundColor = spelareFarg;
-            Console.Write("   " + spelare[i] + "    ");
-            Console.ForegroundColor = aiFarg;
-            Console.WriteLine(ai[i] + " ");
-            Console.ResetColor();
-        }
-
-        // Skriv ut botten
-        Console.WriteLine("  " + spelareSkott + "                                   " + aiSkott);
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine(" _______________________________________");
-        Console.ResetColor();
-    }
-
+   
 
 
 }

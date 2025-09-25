@@ -6,133 +6,58 @@ using System.Threading.Tasks;
 
 namespace Shotgun
 {
-    public class spelare
+    public class Spelare
     {
         public string Namn {  get; set; }
         public string Val {  get; set; }
         public int Skott { get; set; }// = 100; om startvärdet skulle vara 100
 
-
-
-        public string[] Start =
-   {
-            "      O        ",
-            "     /|\\       ",
-            "     / \\       "
-        };
-
-        public string[] AiStart =
+        //metod för att giltigt val ska skickas tillbaka
+        public string GiltigtVal(int skott) //tar in värdet från skott
         {
-            "      [o_o]   ",
-            "       |#|   ",
-            "      /   \\ "
-        };
-        public string[] Vinnare =
-        {
+            
 
-            "    \\O/      ",
-            "     |       ",
-            "    / \\      "
-        };
-
-        // ASCII-robot
-        public string[] AiFörlorare =
-        {
-            "         ?     ",
-            "       [x_x]  ",
-            "       _|#|_  "
-        };
+            string val = ""; //en string som bara finns i metoden
+            bool giltig = false;
 
 
-        public string[] Ladda =
-        {
-            "      O   +    ",
-            "     /|\\       ",
-            "     / \\       "
-        };
 
-        public string[] AiLadda =
-        {    
-            "   +  [o_o]    ",
-            "       |#|    ",
-            "      /   \\ "
-        };
+            while (giltig == false)
+            {
+                val = Console.ReadLine().ToLower();
+                //ladda, skjuta, blocka, shotgun ska bli rätt
+                if (val == "ladda" || val == "blocka")
+                {
+                    giltig = true;
+                }
+                else if (val == "skjuta" && skott <= 0)
+                {
+                    Console.WriteLine("Du har inga skott, välj ladda eller blocka: ");
+                }
+                else if (val == "skjuta" && skott > 0)
+                {
+                    giltig = true;
+                }
+                else if (val == "shotgun" && skott < 3)
+                {
+                    Console.WriteLine("Du behöver 3 skott för shotgun, välj igen: ");
+                }
+                else if (val == "shotgun" && skott >= 3)
+                {
+                    giltig = true;
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("ladda, skjuta, blocka eller shotgun? ");
 
-        public string[] Skjuta =
-        {
+                }
 
-            "     O        ",
-            "    /|->  -  -",
-            "    / \\       "
-        };
+            }
+            return val;
+        }
 
-        public string[] SkjutaPers =
-        {
+       
 
-            "     O",
-            "    /|->",
-            "    / \\"
-        };
-
-        public string[] SkjutaSkott =
-       {
-
-                  "        ",
-                  "  -  -",
-                    "       "
-        };
-
-        public string[] AiSkjuta =
-        {
-              "       [o_o]   ",
-              "-  -  <-|#|    ",
-              "       /   \\  "
-        };
-
-        public string[] Shotgun =
-       {
-
-            "     O       -",
-            "    /|->  -<  -",
-            "    / \\      -"
-        };
-
-        public string[] AiShotgun =
-        {
-              "-      [o_o]   ",
-              "-  >- <-|#|    ",
-              "-      /   \\  "
-        };
-
-        public string[] Blocka =
-        {
-
-            "     O         ",
-            "    /|-<|      ",
-            "    / \\        "
-        };
-
-        public string[] AiBlocka =
-        {
-              "       [o_o]   ",
-              "     |>-|#|    ",
-              "       /   \\  "
-        };
-
-        public string[] Förlorare =
-        {
-
-            "     |Ø|       ",
-            "      |       ",
-            "     | |      "
-        };
-
-        // ASCII-robot
-        public string[] AiVinnare =
-        {
-            "     \\[^_^]/   ",
-            "        |#|     ",
-            "       /   \\   "
-        };
     }
 }
