@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shotgun
+﻿namespace Shotgun
 {
     public class Spelare
     {
-        public string Namn {  get; set; }
-        public string Val {  get; set; }
-        public int Skott { get; set; }// = 100; om startvärdet skulle vara 100
+        public string Namn { get; set; }
+        public string Val { get; set; }
+        public int Skott { get; set; }
 
         //metod för att giltigt val ska skickas tillbaka
         public string GiltigtVal(int skott) //tar in värdet från skott
         {
-            
 
-            string val = ""; //en string som bara finns i metoden
+            string val = "";
             bool giltig = false;
 
 
@@ -25,7 +18,7 @@ namespace Shotgun
             while (giltig == false)
             {
                 val = Console.ReadLine().ToLower();
-                //ladda, skjuta, blocka, shotgun ska bli rätt
+                
                 if (val == "ladda" || val == "blocka")
                 {
                     giltig = true;
@@ -33,6 +26,7 @@ namespace Shotgun
                 else if (val == "skjuta" && skott <= 0)
                 {
                     Console.WriteLine("Du har inga skott, välj ladda eller blocka: ");
+                    Console.WriteLine();
                 }
                 else if (val == "skjuta" && skott > 0)
                 {
@@ -41,6 +35,7 @@ namespace Shotgun
                 else if (val == "shotgun" && skott < 3)
                 {
                     Console.WriteLine("Du behöver 3 skott för shotgun, välj igen: ");
+                    Console.WriteLine();
                 }
                 else if (val == "shotgun" && skott >= 3)
                 {
@@ -50,6 +45,7 @@ namespace Shotgun
                 {
                     Console.WriteLine();
                     Console.WriteLine("ladda, skjuta, blocka eller shotgun? ");
+                    Console.WriteLine();
 
                 }
 
@@ -57,7 +53,29 @@ namespace Shotgun
             return val;
         }
 
-       
 
+        //metod för att välja namn, 2 försök, annars blir det Blipp
+        public void ValjNamn()
+        {   
+
+            Console.Write("Skriv in ditt användarnamn, max 10 tecken: ");
+            Namn = Console.ReadLine();
+
+           
+            if (Namn.Length > 10 || string.IsNullOrWhiteSpace(Namn))
+            {
+                Console.WriteLine("Namnet är för långt, max 10 tecken. Försök igen.");
+                Console.Write("Skriv in ditt användarnamn: ");
+                Namn = Console.ReadLine();
+            }
+
+            if (Namn.Length > 10 || string.IsNullOrWhiteSpace(Namn))
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Nej men då får du heta Blipp.");
+                Console.ResetColor();
+                Namn = "Blipp";
+            }
+        }
     }
 }

@@ -1,22 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shotgun
+﻿namespace Shotgun
 {
     public class Ai
     {
-
         public string Namn { get; set; }
         public string Val { get; set; }
         public int Skott { get; set; }
+        public Dictionary<string, string[]> AiBilder { get; set; }
+        public Dictionary<string, string[]> AiValBilder { get; set; }
+        public ConsoleColor AiFarg { get; set; }
+        public string Introduktion { get; set; }
+        public string Avslutning { get; set; }
+        public string VinstTal { get; set; }
+        public string ForlustTal { get; set; }
 
 
-        public static Random random = new Random(); //skapar ett random objekt
+        public Random random = new Random(); //skapar ett random objekt 
 
-        //Metod som väljer bland de olika valen med randomnr som läses av i arrayen
+        //metod som skapar en ai spelare
+        public Ai SkapaAiSpelaren(Spelare spelare)
+        {    
+            string[] namn = { "RobotMamma" };
+            string valtAinamn = namn[random.Next(namn.Length)];
+           
+            if (valtAinamn == "RobotRobin")
+            {
+                return new RobotRobin();
+
+            }
+            else if (valtAinamn == "RobotMillis")
+            {
+                return new RobotMillis();
+            }
+            else
+            {
+                return new RobotMamma(spelare);
+            }
+            
+        }
+
+        //Metod som väljer ains val slumpmässigt
         public string RandomVal(int spelareSkott) //tar in spelarens skott för att ai ska kunna anpassa sitt val
         {
 
@@ -24,12 +46,13 @@ namespace Shotgun
             bool giltig = false;
 
 
-
+            // En loop som körs tills ett giltigt val är gjort
             while (giltig == false)
             {
-                string[] ai = { "skjuta", "ladda", "blocka", "shotgun" };
-                int i = random.Next(ai.Length);
-                aiVal = ai[i];
+
+                string[] ai = { "ladda","shotgun" };
+                int i = random.Next(ai.Length); //slumpar fram ett nummer mellan 0-3
+                aiVal = ai[i]; //välj ett av alternativen i arrayen
 
                 //ladda, skjuta, blocka, shotgun ska bli rätt
                 if (aiVal == "ladda" && Skott <= 2)  //ai ska inte blocka om spelare har 0 Skott
@@ -41,34 +64,22 @@ namespace Shotgun
                 {
                     giltig = true;
                 }
-                else if (aiVal == "blocka" && spelareSkott == 0)
+                else if (aiVal == "ladda" && spelareSkott == 0 && Skott == 2)
                 {
-
-                }
-                else if (aiVal == "skjuta" && Skott <= 0)
-                {
-
+                    giltig = true;
                 }
                 else if (aiVal == "skjuta" && Skott > 0 && Skott <= 2)
                 {
                     giltig = true;
 
                 }
-                else if (aiVal == "shotgun" && Skott < 3)
-                {
-
-                }
                 else if (aiVal == "shotgun" && Skott >= 3)
                 {
                     giltig = true;
-
                 }
 
             }
             return aiVal;
         }
-       
-
-
     }
 }

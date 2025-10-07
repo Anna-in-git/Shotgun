@@ -1,40 +1,64 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shotgun
+﻿namespace Shotgun
 {
-
-
-    public class Grafik //En class med alla ASCII bilder
+    public class Grafik //En klass med spelarens ASCII bilder och metoder för att visa scener
     {
 
-        // En metod som skriver ut en scen med 2 arrayer bredvid varandra
-        // Lägg till antal skott längst ner i scenen och ev en fördröjning på ai
-        public void CreateScene(string[] spelare, string[] ai, int spelareSkott, int aiSkott, ConsoleColor spelareFarg, ConsoleColor aiFarg)
+
+        public void VisaStartScen(Ai ai, Spelare spelare)
+        {
+            Console.ForegroundColor = ai.AiFarg;
+            Console.WriteLine("     " + ai.Namn + "!");
+            Thread.Sleep(1500);
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(ai.Introduktion);
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("       " + spelare.Namn);
+            Console.ResetColor();
+            Console.ForegroundColor = ai.AiFarg;
+            Console.WriteLine("             " + ai.Namn);
+            Console.ResetColor();
+            SkapaScen(Start, Tom, ai.AiBilder["ladda"], Tom, spelare.Skott, ai.Skott, ai.AiFarg);
+            Console.WriteLine();
+            Console.WriteLine("ladda, skjuta, blocka eller shotgun");
+            Console.WriteLine();
+        }
+
+
+
+        // En metod som skriver ut en scen med 4 arrayer bredvid varandra
+        public void SkapaScen(string[] spelare, string[] spelareVal, string[] ai, string[] aiVal, int spelareSkott, int aiSkott, ConsoleColor aiFarg)
         {
 
 
-            // Skriv ut titlar
+            // Skriv ut toppen, grå färg
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("");
             Console.WriteLine(" ---------------------------------------");
             Console.ResetColor();
             Console.WriteLine();
 
-            // Skriv ut figurerna rad för rad
+            // Skriv ut figurerna och deras val rad för rad i 4 arrayer bredvid varandra, de olika ai spelarna har egen färg och valen är vita
             for (int i = 0; i < spelare.Length; i++)
             {
-                Console.ForegroundColor = spelareFarg;
-                Console.Write("   " + spelare[i] + "    ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("   " + spelare[i]);
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(spelareVal[i] + "    ");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(aiVal[i]);
+                Console.ResetColor();
                 Console.ForegroundColor = aiFarg;
                 Console.WriteLine(ai[i] + " ");
                 Console.ResetColor();
             }
 
-            // Skriv ut botten
+            // Skriv ut botten med antal skott, grå färg
             Console.WriteLine("  " + spelareSkott + "                                   " + aiSkott);
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine(" _______________________________________");
@@ -42,40 +66,80 @@ namespace Shotgun
         }
 
 
+        // En metod som visar vinnarscenen beroende på vem som vann
+        public void VisaVinnarScen(Ai ai, Spelare spelare, string vinnare)
+        {
+
+            if (vinnare == spelare.Namn)
+            {
+               
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("***************************************");
+                Console.WriteLine("         " + spelare.Namn + " ÄR SEGRAREN! ");
+                Console.WriteLine("***************************************");
+                Console.ResetColor();
+                SkapaScen(Vinnare, Tom, ai.AiBilder["forlora"], Tom, spelare.Skott, ai.Skott, ai.AiFarg); //lagt till forlora bild eftersom det inte är ett val
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ai.AiFarg;
+                Console.WriteLine(ai.ForlustTal);  // Förlusttalet från aispelaren
+                Console.ResetColor();
+
+            }
+            else if (vinnare == ai.Namn)
+            {
+                
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ai.AiFarg;
+                Console.WriteLine("***************************************");
+                Console.WriteLine("        " + ai.Namn + " ÄR SEGRAREN! ");
+                Console.WriteLine("***************************************");
+                Console.ResetColor();
+                SkapaScen(Förlorare, Tom, ai.AiBilder["vinna"], Tom, spelare.Skott, ai.Skott, ai.AiFarg);
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ai.AiFarg;
+                Console.WriteLine(ai.VinstTal);
+                Console.ResetColor();
+            }
+        }
+
+
         public string[] Start =
        {
-            "      O        ",
-            "     /|\\       ",
-            "     / \\       "
+            "      O            ",
+            "     /|\\            ",
+            "     / \\           "
         };
 
 
-        public string[] Ladda =
+        public string[] Ladda1 =
         {
-            "      O   +    ",
-            "     /|\\       ",
-            "     / \\       "
+            "      O ",
+            "     /|\\",
+            "     / \\"
+        };
+
+        public string[] Ladda2 =
+        {
+                     "  +   ",
+                     "      ",
+                     "      "
         };
 
 
         public string[] Blocka =
      {
 
-            "     O         ",
-            "    /|-<|      ",
-            "    / \\        "
-        };
-
-
-        public string[] Skjuta =
-        {
-
             "     O        ",
-            "    /|->  -  -",
+            "    /|-<|     ",
             "    / \\       "
         };
 
-        public string[] SkjutaPers =
+        public string[] Skjuta1 =
         {
 
             "     O",
@@ -83,89 +147,64 @@ namespace Shotgun
             "    / \\"
         };
 
-        public string[] SkjutaSkott =
+        public string[] Skjuta2 =
        {
 
                   "        ",
                   "  -  -",
-                    "       "
+                  "       "
         };
 
-
-        public string[] Shotgun =
+        public string[] Shotgun1 =
        {
 
-            "     O        -",
-            "    /|->  -< - ",
-            "    / \\       -"
+            "     O",
+            "    /|->",
+            "    / \\"
+        };
+
+        public string[] Shotgun2 =
+       {
+
+                  "       -",
+                  " -< - ",
+                  "      -"
         };
 
 
         public string[] Vinnare =
    {
 
-            "    \\O/      ",
-            "     |       ",
-            "    / \\      "
+            "     \\O/       ",
+            "      |        ",
+            "     / \\       "
         };
 
 
         public string[] Förlorare =
         {
 
-            "     |Ø|       ",
+            "     |Ø|      ",
             "      |       ",
             "     | |      "
         };
 
-
-        public string[] AiStart =
+        public string[] Tom =
        {
-            "      [o_o]   ",
-            "       |#|   ",
-            "      /   \\ "
+            "",
+            "",
+            ""
         };
 
-        public string[] AiLadda =
+        public string[] AiMamma =
         {
-            "   +  [o_o]    ",
-            "       |#|    ",
-            "      /   \\ "
+         " .<(^o^)>.    [o_o]     s(*_*)s    ",
+         " ú-|#&|       |#|        |&|      ",
+         "    /  \\       / \\        / \\   "
         };
 
-        public string[] AiBlocka =
-        {
-              "       [o_o]   ",
-              "     |>-|#|    ",
-              "       /   \\  "
-        };
+     
 
-        public string[] AiSkjuta =
-        {
-              "       [o_o]   ",
-              "-  -  <-|#|    ",
-              "       /   \\  "
-        };
 
-        public string[] AiShotgun =
-        {
-             "-       [o_o]   ",
-             " -  >- <-|#|    ",
-             "-       /   \\  "
-        };
-
-        public string[] AiVinnare =
-        {
-            "     \\[^_^]/   ",
-            "        |#|     ",
-            "       /   \\   "
-        };
-
-        public string[] AiFörlorare =
-        {
-            "         ?     ",
-            "       [x_x]  ",
-            "       _|#|_  "
-        };
     }
 }
