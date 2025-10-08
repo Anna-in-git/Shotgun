@@ -59,8 +59,8 @@ public class Program
         Console.WriteLine("Ni turas om att välja era drag, ska du ladda, skjuta, blocka eller spara till ett mäktigt SHOTGUN?");
         Console.WriteLine();
         Console.WriteLine("* Ladda  = + 1 skott");
-        Console.WriteLine("* Skjuta = Du måste ha skott och vinner om motståndaren blockar eller laddar.");
-        Console.WriteLine("* Blocka = Skyddar mot skott.");
+        Console.WriteLine("* Skjuta = Du måste ha minst 1 skott och vinner om motståndaren blockar eller laddar.");
+        Console.WriteLine("* Blocka = Skyddar dig mot skott.");
         Console.WriteLine("* Shotgun = Om du har 3 skott, kan du vinna direkt!");
         Console.WriteLine();
         Console.WriteLine("----------------------------------------------------------------------------------------------------------------------");
@@ -69,8 +69,7 @@ public class Program
         Console.WriteLine();
         Console.WriteLine("Dina Motståndare är sluga, blockar när de anar fara och väntar på rätt läge...");
         Console.WriteLine();
-        Console.WriteLine();
-        
+
 
 
 
@@ -272,9 +271,9 @@ public class Program
                         spela = true;
 
                         Console.WriteLine();
-                        Console.WriteLine("Du kör vi!");
+                        Console.WriteLine("Du laddar om vapnet och kliver tillbaka in i arenan...");
                         Console.WriteLine();
-                        Console.WriteLine(spelare.Namn + " Då ska vi se vem som vågar möta dej nu...");
+                        Console.WriteLine(spelare.Namn + " , då ska vi se vem som vågar möta dej nu...");
                         Console.WriteLine();
                         Thread.Sleep(2000);
                         Console.WriteLine();
@@ -309,9 +308,13 @@ public class Program
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("Du faller till marken, besegrad av " + ai.Namn);
                             Console.ResetColor();
+                            Console.WriteLine();
+                            Thread.Sleep(1500);
                             Console.ForegroundColor = ai.AiFarg;
                             Console.WriteLine(ai.Avslutning); //Avslutningsfras aiVinnare
                             Console.ResetColor();
+                            Thread.Sleep(1500);
+                            Console.WriteLine();
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine(ai.Namn + " går därifrån och lämnar dig i dammet..."); //AvslutningsTal aiVinnare
                             Console.ResetColor();
@@ -331,8 +334,17 @@ public class Program
 
 
         }
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
 
-        
+
     }
 
 

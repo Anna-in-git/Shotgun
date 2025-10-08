@@ -6,15 +6,24 @@
         {
             Namn = "RobotMamma";
             AiFarg = ConsoleColor.Yellow;
-            Introduktion = "RobotMamma är snäll och ger dig ett skott att börja med!";
+            Introduktion = "RobotMamma är snäll och bjuder dig på en kopp kaffe och ett skott att börja med!";
             Avslutning = "Inte va ledsen nu, det kommer säker gå bättre nästa gång. RobotMamma vet bäst ";
             ForlustTal = "Hur kunde du göra så mot RobotMamma? fy skäms på dej! \nJag går och laddar upp med en ny kaffe!";
-            VinstTal = "Ojj, var kaffet lite för varmt för dej, kom så ska jag blåsa.";
+            VinstTal = "Ojj, var kaffet lite för varmt för dej? \nKom, så ska jag blåsa.";
 
             spelare.Skott = spelare.Skott + 1;
 
             AiBilder = new Dictionary<string, string[]>
             {
+                {
+                    "start",
+                    new string[]
+                    {
+                           ".<(^o^)>.    ",
+                           "ù-|#&|-ù  ",
+                           "   /  \\ "
+                    }
+                },
                 {
                     "ladda",
                     new string[]

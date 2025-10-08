@@ -9,11 +9,20 @@
             Introduktion = "RobotMillis är busig och har smygit med ett skott till sej själv! ";
             Avslutning = "Hej då, hoppas vi INTE ses igen! ";
             VinstTal = "Jag vann!! jag är bäst, ingen protest!! ";
-            ForlustTal = "Du måste ha fuskat... \nUndrar vart jag la det där extraskottet, det kan ju behövas till nästa gång.";
+            ForlustTal = "Du måste ha fuskat... \nUndrar vart jag la det där extraskottet? det kan ju behövas till nästa gång.";
             Skott =   Skott + 1;
 
             AiBilder = new Dictionary<string, string[]>
             {
+                {
+                    "start",
+                    new string[]
+                    {
+                             "s(^_^)s    ",
+                              " |&|-+    ",
+                             "  / \\ "
+                    }
+                },
                 {
                     "ladda",
                     new string[]
@@ -63,9 +72,9 @@
                     "vinna",
                     new string[]
                    {
-                      "    s(^_^)s ",
-                      "     -|&|-    ",
-                      "      / \\  "
+                      "     s(^_^)s ",
+                      "      -|&|-    ",
+                      "       / \\  "
                    }
                 },
                 {
@@ -73,7 +82,7 @@
                     new string[]
                    {
                        "     ?      ",
-                       "  s(x_x)s ",
+                       "  s(*_*)s ",
                        "   _|&|_  "
                    }
                 }

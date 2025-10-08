@@ -21,7 +21,7 @@
             Console.ForegroundColor = ai.AiFarg;
             Console.WriteLine("             " + ai.Namn);
             Console.ResetColor();
-            SkapaScen(Start, Tom, ai.AiBilder["ladda"], Tom, spelare.Skott, ai.Skott, ai.AiFarg);
+            SkapaScen(Start, Tom, ai.AiBilder["start"], Tom, spelare.Skott, ai.Skott, ai.AiFarg);
             Console.WriteLine();
             Console.WriteLine("ladda, skjuta, blocka eller shotgun");
             Console.WriteLine();
