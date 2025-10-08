@@ -19,7 +19,7 @@
         //metod som skapar en ai spelare
         public Ai SkapaAiSpelaren(Spelare spelare)
         {    
-            string[] namn = { "RobotMamma" };
+            string[] namn = { "RobotRobin", "RobotMillis", "RobotMamma" };
             string valtAinamn = namn[random.Next(namn.Length)];
            
             if (valtAinamn == "RobotRobin")
@@ -50,7 +50,7 @@
             while (giltig == false)
             {
 
-                string[] ai = { "ladda","shotgun" };
+                string[] ai = { "blocka", "skjuta", "ladda","shotgun" };
                 int i = random.Next(ai.Length); //slumpar fram ett nummer mellan 0-3
                 aiVal = ai[i]; //välj ett av alternativen i arrayen
 
